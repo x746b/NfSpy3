@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Unmodified code distributed with Python 2.6
 # Mount RPC client -- RFC 1094 (NFS), Appendix A
 
@@ -10,8 +12,8 @@
 # protocol, use multiple inheritance as shown below.
 
 
-import rpc
-from rpc import Packer, Unpacker, TCPClient, UDPClient, UDPPortMapperClient
+from . import rpc
+from .rpc import Packer, Unpacker, TCPClient, UDPClient, UDPPortMapperClient
 
 
 # Program number and version for the mount protocol
@@ -87,7 +89,7 @@ class Mount3Unpacker(MountUnpacker):
             #Not sure how to use this:
             num_flavors = self.unpack_uint()
             auth_flavors = []
-            for n in xrange(num_flavors):
+            for n in range(num_flavors):
                 auth_flavors.append(self.unpack_uint())
         else:
             fh = None
@@ -103,10 +105,10 @@ class PartialMountClient:
     def addpackers(self):
         if self.version == 3:
             self.packer = Mount3Packer()
-            self.unpacker = Mount3Unpacker('')
+            self.unpacker = Mount3Unpacker(b'')
         else:
             self.packer = MountPacker()
-            self.unpacker = MountUnpacker('')
+            self.unpacker = MountUnpacker(b'')
 
     # This method is called by Client.__init__ to bind the socket
     # to a particular network interface and port.  We use the
@@ -219,15 +221,15 @@ def test():
         C = UDPMountClient
     if sys.argv[1:]: host = sys.argv[1]
     else: host = ''
-    print "exports on %s" % host
+    print("exports on %s" % host)
     mcl = C(host)
-    list = mcl.Export()
-    for item in list:
-        print item
+    export_list = mcl.Export()
+    for item in export_list:
+        print(item)
         try:
             mcl.Mnt(item[0])
         except:
-            print 'Sorry'
+            print('Sorry')
             continue
         mcl.Umnt(item[0])
 

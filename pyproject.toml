@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "NfSpy"
+version = "1.0.0"
+description = "ID-spoofing NFS client"
+readme = "README.md"
+authors = [
+  { name = "Daniel Miller", email = "bonsaiviking@gmail.com" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+]
+requires-python = ">=3.6"
+dependencies = []
+
+[project.optional-dependencies]
+# The code uses python-fuse bindings (fuse.Fuse class), not fusepy.
+fuse = ["fuse-python"]
+
+[project.urls]
+Homepage = "https://github.com/bonsaiviking/NfSpy"
+
+[tool.setuptools]
+# Install the scripts from the scripts/ directory
+script-files = ["scripts/nfspy", "scripts/nfspysh"]
+
+[tool.setuptools.packages.find]
+include = ["nfspy*"]

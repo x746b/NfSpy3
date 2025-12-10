@@ -9,6 +9,9 @@ share. Included are two client programs:
   share in Linux. This allows the use of any regular file-searching and
   manipulation programs like `grep` and `find` to explore the NFS export.
 
+This codebase targets Python 3; use `python3` when installing or invoking the
+command-line tools.
+
 * **nfspysh** is a ftp-like interactive shell for exploring NFS exports. It does
   not require the FUSE library, so it can run on non-Linux platforms.
 

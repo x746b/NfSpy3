@@ -12,13 +12,14 @@ class LRU:
     http://pype.sourceforge.net
     Copyright 2003 Josiah Carlson.
     """
-    def __init__(self, count, pairs=[]):
+    def __init__(self, count, pairs=None):
         self.count = max(count, 1)
         self.d = {}
         self.first = None
         self.last = None
-        for key, value in pairs:
-            self[key] = value
+        if pairs:
+            for key, value in pairs:
+                self[key] = value
     def __contains__(self, obj):
         return obj in self.d
     def __getitem__(self, obj):
@@ -59,21 +60,25 @@ class LRU:
         del self.d[obj]
     def __iter__(self):
         cur = self.first
-        while cur != None:
+        while cur is not None:
             cur2 = cur.next
             yield cur.me[1]
             cur = cur2
     def iteritems(self):
         cur = self.first
-        while cur != None:
+        while cur is not None:
             cur2 = cur.next
             yield cur.me
             cur = cur2
     def iterkeys(self):
         return iter(self.d)
     def itervalues(self):
-        for i,j in self.iteritems():
+        for i, j in self.iteritems():
             yield j
+    def items(self):
+        return list(self.iteritems())
+    def values(self):
+        return list(self.itervalues())
     def keys(self):
         return self.d.keys()
     def prune(self,func):

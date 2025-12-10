@@ -1,9 +1,11 @@
+#!/usr/bin/env python3
+
 # Modified from code distributed with Python 2.6
 # NFS RPC client -- RFC 1094
 
-import rpc
-from rpc import UDPClient, TCPClient
-from mountclient import FHSIZE, Mount3Packer, Mount3Unpacker
+from . import rpc
+from .rpc import UDPClient, TCPClient
+from .mountclient import FHSIZE, Mount3Packer, Mount3Unpacker
 import errno
 import os
 
@@ -77,7 +79,7 @@ class NFSError(Exception):
     def __str__(self):
         try:
             return os.strerror(getattr(errno, NFSError.lookup[self.value]))
-        except KeyError, AttributeError:
+        except (KeyError, AttributeError):
             return "NFS Error %d" % (self.value)
     def errno(self):
         return self.value
@@ -515,7 +517,7 @@ class TCPNFSClient(TCPClient):
 
 class PartialNFSClient:
     def __init__(self, host):
-        raise RuntimeError, 'Must use UDPNFSClient or TCPNFSClient'
+        raise RuntimeError('Must use UDPNFSClient or TCPNFSClient')
 
     def bindsocket(self):
         import os
@@ -531,7 +533,7 @@ class PartialNFSClient:
 
     def addpackers(self):
         self.packer = NFSPacker()
-        self.unpacker = NFSUnpacker('')
+        self.unpacker = NFSUnpacker(b'')
 
     def mkcred(self):
         if self.cred is None:
@@ -671,8 +673,8 @@ class PartialNFSClient:
     # Shorthand to get the entire contents of a directory
     def Listdir(self, dir, tsize):
         list = []
-        ra = (dir, 0, '', tsize)
-        while 1:
+        ra = (dir, 0, b'', tsize)
+        while True:
             attr, verf, entries, eof = self.Readdir(ra)
             last_cookie = None
             for fileid, name, cookie in entries:
@@ -697,23 +699,24 @@ def test():
     else: host = ''
     if sys.argv[2:]: filesys = sys.argv[2]
     else: filesys = None
-    from mountclient import UDPMountClient, TCPMountClient
+    from .mountclient import UDPMountClient, TCPMountClient
     mcl = TCPMountClient(host)
     if filesys is None:
-        list = mcl.Export()
-        for item in list:
-            print item
+        export_list = mcl.Export()
+        for item in export_list:
+            print(item)
         return
     sf = mcl.Mnt(filesys)
-    print sf
+    print(sf)
     fh = sf[1]
     if fh:
         ncl = UDPNFSClient(host)
         attrstat = ncl.Getattr(fh)
-        print "gotattrs\n"
-        print attrstat
-        list = ncl.Listdir(fh, 4096)
-        for item in list: print item
+        print("gotattrs\n")
+        print(attrstat)
+        listing = ncl.Listdir(fh, 4096)
+        for item in listing:
+            print(item)
         mcl.Umnt(filesys)
 
 if __name__ == '__main__':

@@ -1,3 +1,3 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-from nfspy import *
+from .nfspy import *

@@ -1,5 +1,7 @@
+#!/usr/bin/env python3
+
 import fuse
-from nfspy import NfSpy, NFSStat
+from .nfspy import NfSpy, NFSStat
 
 fuse.fuse_python_api = (0, 2)
 
@@ -17,7 +19,7 @@ class NFSFuse(NfSpy, fuse.Fuse):
         try:
             NfSpy.fsinit(self)
         except RuntimeError as e:
-            raise fuse.FuseError, e.message
+            raise fuse.FuseError(str(e))
 
     def getattr(self, path):
         st = NfSpy.getattr(self, path)
