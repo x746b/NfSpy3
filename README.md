@@ -1,6 +1,6 @@
-NfSpy - an ID-spoofing NFS client
+NfSpy3 - an ID-spoofing NFS client
 =================================
-by [Daniel Miller](https://github.com/bonsaiviking)
+by [Daniel Miller](https://github.com/bonsaiviking) ported to Python3 by xtk https://github.com/x746b
 
 NfSpy is a Python library for automating the falsification of NFS credentials when mounting an NFS
 share. Included are two client programs:
